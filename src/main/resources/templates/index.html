@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org"
-      th:with="langPrefix=${currentLang == 'ru' ? '' : '/' + currentLang}">
+      th:with="
+        currentUri=${#httpServletRequest.requestURI},
+        langPrefix=${currentLang == 'ru' ? '' : '/' + currentLang},
+        pathSuffix=${currentLang == 'ru' ? currentUri : #strings.substring(currentUri, #strings.length('/' + currentLang))}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -215,11 +218,11 @@
         </div>
 
         <footer>
-            <a href="/" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
-            <a href="/en" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
-            <a href="/uk" th:classappend="${currentLang == 'uk' ? 'active' : ''}"><img src="/assets/lang/ua.png" alt="Українська"></a>
-            <a href="/zh-CN" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
-            <a href="/zh-TW" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
+            <a th:href="@{${#strings.isEmpty(pathSuffix) ? '/' : pathSuffix}}" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
+            <a th:href="@{'/en' + ${pathSuffix}}" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
+            <a th:href="@{'/uk' + ${pathSuffix}}" th:classappend="${currentLang == 'uk' ? 'active' : ''}"><img src="/assets/lang/ua.png" alt="Українська"></a>
+            <a th:href="@{'/zh-CN' + ${pathSuffix}}" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
+            <a th:href="@{'/zh-TW' + ${pathSuffix}}" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
         </footer>
     </div>
 
