@@ -29,7 +29,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    // ---- Главная (лендинг) для каждого языка ----
+    // --- Главная ---
 
     @GetMapping("/")
     public String homeRu(HttpServletRequest req, HttpServletResponse res, Model model) {
@@ -59,7 +59,14 @@ public class Application {
         return "index";
     }
 
-    // ---- Гайд ----
+    @GetMapping("/uk")
+    public String homeUk(HttpServletRequest req, HttpServletResponse res, Model model) {
+        localeResolver.setLocale(req, res, Locale.forLanguageTag("uk"));
+        model.addAttribute("currentLang", "uk");
+        return "index";
+    }
+
+    // --- Гайд (список) ---
 
     @GetMapping("/guide")
     public String guideRu(HttpServletRequest req, HttpServletResponse res, Model model) {
@@ -78,6 +85,17 @@ public class Application {
         model.addAttribute("locale", Locale.forLanguageTag("en"));
         return "guide";
     }
+
+    @GetMapping("/uk/guide")
+    public String guideUk(HttpServletRequest req, HttpServletResponse res, Model model) {
+        localeResolver.setLocale(req, res, Locale.forLanguageTag("uk"));
+        model.addAttribute("currentLang", "uk");
+        model.addAttribute("lessons", lessonService.getAll());
+        model.addAttribute("locale", Locale.forLanguageTag("uk"));
+        return "guide";
+    }
+
+    // --- Один урок ---
 
     @GetMapping("/guide/{slug}")
     public String lessonRu(@PathVariable String slug, HttpServletRequest req, HttpServletResponse res, Model model) {
@@ -101,9 +119,13 @@ public class Application {
         return "lesson";
     }
 
-    @GetMapping("/api/status")
-    @ResponseBody
-    public String status() {
-        return "Java-сервер работает отлично! 🚀";
+    @GetMapping("/uk/guide/{slug}")
+    public String lessonUk(@PathVariable String slug, HttpServletRequest req, HttpServletResponse res, Model model) {
+        localeResolver.setLocale(req, res, Locale.forLanguageTag("uk"));
+        var lesson = lessonService.findBySlug(slug).orElse(null);
+        if (lesson == null) return "redirect:/uk/guide";
+        model.addAttribute("currentLang", "uk");
+        model.addAttribute("lesson", lesson);
+        model.addAttribute("locale", Locale.forLanguageTag("uk"));
+        return "lesson";
     }
-}

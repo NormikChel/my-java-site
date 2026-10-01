@@ -1,30 +1,36 @@
 package com.example;
 
 import java.util.Locale;
+import java.util.Map;
 
 public record Lesson(
     String slug,
     String emoji,
-    String titleRu,
-    String titleEn,
-    String subtitleRu,
-    String subtitleEn,
-    String contentRu,
-    String contentEn
+    Map<String, String> titles,
+    Map<String, String> subtitles,
+    Map<String, String> contents
 ) {
     public String getTitle(Locale locale) {
-        return isEn(locale) ? titleEn : titleRu;
+        return titles.getOrDefault(key(locale), titles.get("en"));
     }
 
     public String getSubtitle(Locale locale) {
-        return isEn(locale) ? subtitleEn : subtitleRu;
+        return subtitles.getOrDefault(key(locale), subtitles.get("en"));
     }
 
     public String getContent(Locale locale) {
-        return isEn(locale) ? contentEn : contentRu;
+        return contents.getOrDefault(key(locale), contents.get("en"));
     }
 
-    private boolean isEn(Locale locale) {
-        return locale != null && "en".equals(locale.getLanguage());
+    private String key(Locale locale) {
+        if (locale == null) return "en";
+        String lang = locale.getLanguage();
+        String country = locale.getCountry();
+        if ("zh".equals(lang)) {
+            return "CN".equals(country) ? "zh_CN" : "zh_TW";
+        }
+        if ("uk".equals(lang)) return "uk";
+        if ("ru".equals(lang)) return "ru";
+        return "en";
     }
 }
