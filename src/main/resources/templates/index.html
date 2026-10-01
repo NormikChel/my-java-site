@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Easy Java — сайт для тех, кто хочет выучить Java без страха и боли.">
+    <meta name="keywords" content="Java, программирование, обучение, Spring Boot, easy java">
+    
+    <!-- Open Graph / Соцсети -->
+    <meta property="og:title" content="Easy Java">
+    <meta property="og:description" content="Хватит бояться Java. Заходи, тут всё просто.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://easyjava.relaxdev.ru/">
+    <meta name="twitter:card" content="summary_large_image">
+
+    <title>Easy Java</title>
+    
+    <!-- Стили -->
+    <style>
+        :root {
+            /* Светлая тема (по умолчанию) */
+            --bg-color: #f0f2f5;
+            --text-color: #1a1a1a;
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --accent: #f89820;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                /* Темная тема (системная) */
+                --bg-color: #0f172a;
+                --text-color: #e2e8f0;
+                --glass-bg: rgba(30, 41, 59, 0.4);
+                --glass-border: rgba(255, 255, 255, 0.1);
+                --accent: #f89820;
+            }
+        }
+
+        [data-theme="light"] {
+            --bg-color: #f0f2f5;
+            --text-color: #1a1a1a;
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.8);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f172a;
+            --text-color: #e2e8f0;
+            --glass-bg: rgba(30, 41, 59, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            /* Красивый градиентный фон для эффекта стекла */
+            background-image: radial-gradient(circle at 10% 20%, rgba(248, 152, 32, 0.1) 0%, transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(83, 130, 161, 0.1) 0%, transparent 40%);
+        }
+
+        .glass-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 800px;
+            width: 100%;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            animation: fadeIn 0.8s ease-out;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--accent);
+            color: #fff;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 15px rgba(248, 152, 32, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            background-color: #ffb347;
+        }
+
+        footer {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        footer img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        footer img:hover {
+            transform: scale(1.2);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        /* Кнопка смены темы */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Адаптивность: Планшеты и небольшие ноутбуки */
+        @media (max-width: 768px) {
+            .glass-container { padding: 30px; }
+            h1 { font-size: 2.2rem; }
+            p { font-size: 1rem; }
+        }
+
+        /* Адаптивность: Смартфоны */
+        @media (max-width: 480px) {
+            .glass-container { padding: 20px; }
+            h1 { font-size: 1.8rem; }
+            .btn { width: 100%; text-align: center; }
+        }
+
+        /* Адаптивность: Умные часы */
+        @media (max-width: 280px) {
+            .glass-container { padding: 10px; border-radius: 12px; }
+            h1 { font-size: 1.2rem; }
+            p { font-size: 0.8rem; margin-bottom: 15px; }
+            .btn { font-size: 0.8rem; padding: 8px 10px; }
+            footer img { width: 24px; height: 24px; }
+            .theme-toggle { width: 35px; height: 35px; font-size: 1rem; top: 10px; right: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Кнопка переключения темы -->
+    <button class="theme-toggle" id="theme-toggle" title="Сменить тему">🌓</button>
+
+    <div class="glass-container">
+        <h1 th:text="#{welcome.title}">Java — это просто!</h1>
+        <p th:text="#{welcome.subtitle}">Хватит бояться. Здесь ты научишься писать код.</p>
+        
+        <a href="/api/status" class="btn" th:text="#{btn.check}">Проверить сервер</a>
+    </div>
+
+    <footer>
+        <!-- Флаги для переключения языка -->
+        <a href="?lang=ru"><img src="/assets/lang/ru.png" alt="Русский"></a>
+        <a href="?lang=en"><img src="/assets/lang/us.png" alt="English"></a>
+        <a href="?lang=zh_Hans"><img src="/assets/lang/cn.png" alt="简体中文"></a>
+        <a href="?lang=zh_Hant"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
+    </footer>
+
+    <script>
+        // Логика переключения темы (системная -> светлая -> темная)
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        
+        // Проверяем сохраненную тему
+        let currentTheme = localStorage.getItem('theme') || 'system';
+        
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                htmlElement.setAttribute('data-theme', 'dark');
+            } else if (theme === 'light') {
+                htmlElement.setAttribute('data-theme', 'light');
+            } else {
+                htmlElement.removeAttribute('data-theme'); // Отдаем управление системной теме
+            }
+        }
+
+        applyTheme(currentTheme);
+
+        themeToggle.addEventListener('click', () => {
+            if (currentTheme === 'system') currentTheme = 'light';
+            else if (currentTheme === 'light') currentTheme = 'dark';
+            else currentTheme = 'system';
+            
+            localStorage.setItem('theme', currentTheme);
+            applyTheme(currentTheme);
+        });
+    </script>
+</body>
+</html>
