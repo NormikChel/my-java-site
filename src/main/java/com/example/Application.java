@@ -29,6 +29,8 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
+    // ================== ГЛАВНАЯ ==================
+
     @GetMapping("/")
     public String homeRu(HttpServletRequest req, HttpServletResponse res, Model model) {
         localeResolver.setLocale(req, res, Locale.forLanguageTag("ru"));
@@ -64,6 +66,8 @@ public class Application {
         return "index";
     }
 
+    // ================== ГАЙД (СПИСОК) ==================
+
     @GetMapping("/guide")
     public String guideRu(HttpServletRequest req, HttpServletResponse res, Model model) {
         localeResolver.setLocale(req, res, Locale.forLanguageTag("ru"));
@@ -90,6 +94,26 @@ public class Application {
         model.addAttribute("locale", Locale.forLanguageTag("uk"));
         return "guide";
     }
+
+    @GetMapping("/zh-CN/guide")
+    public String guideCn(HttpServletRequest req, HttpServletResponse res, Model model) {
+        localeResolver.setLocale(req, res, Locale.forLanguageTag("zh-CN"));
+        model.addAttribute("currentLang", "zh-CN");
+        model.addAttribute("lessons", lessonService.getAll());
+        model.addAttribute("locale", Locale.forLanguageTag("zh-CN"));
+        return "guide";
+    }
+
+    @GetMapping("/zh-TW/guide")
+    public String guideTw(HttpServletRequest req, HttpServletResponse res, Model model) {
+        localeResolver.setLocale(req, res, Locale.forLanguageTag("zh-TW"));
+        model.addAttribute("currentLang", "zh-TW");
+        model.addAttribute("lessons", lessonService.getAll());
+        model.addAttribute("locale", Locale.forLanguageTag("zh-TW"));
+        return "guide";
+    }
+
+    // ================== ОДИН УРОК ==================
 
     @GetMapping("/guide/{slug}")
     public String lessonRu(@PathVariable String slug, HttpServletRequest req, HttpServletResponse res, Model model) {
@@ -123,6 +147,30 @@ public class Application {
         model.addAttribute("locale", Locale.forLanguageTag("uk"));
         return "lesson";
     }
+
+    @GetMapping("/zh-CN/guide/{slug}")
+    public String lessonCn(@PathVariable String slug, HttpServletRequest req, HttpServletResponse res, Model model) {
+        localeResolver.setLocale(req, res, Locale.forLanguageTag("zh-CN"));
+        var lesson = lessonService.findBySlug(slug).orElse(null);
+        if (lesson == null) return "redirect:/zh-CN/guide";
+        model.addAttribute("currentLang", "zh-CN");
+        model.addAttribute("lesson", lesson);
+        model.addAttribute("locale", Locale.forLanguageTag("zh-CN"));
+        return "lesson";
+    }
+
+    @GetMapping("/zh-TW/guide/{slug}")
+    public String lessonTw(@PathVariable String slug, HttpServletRequest req, HttpServletResponse res, Model model) {
+        localeResolver.setLocale(req, res, Locale.forLanguageTag("zh-TW"));
+        var lesson = lessonService.findBySlug(slug).orElse(null);
+        if (lesson == null) return "redirect:/zh-TW/guide";
+        model.addAttribute("currentLang", "zh-TW");
+        model.addAttribute("lesson", lesson);
+        model.addAttribute("locale", Locale.forLanguageTag("zh-TW"));
+        return "lesson";
+    }
+
+    // ================== API ==================
 
     @GetMapping("/api/status")
     @ResponseBody

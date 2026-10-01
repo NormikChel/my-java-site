@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:with="langPrefix=${currentLang == 'ru' ? '' : '/' + currentLang}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -59,17 +60,19 @@
 <body>
     <div class="wrap bvi-speech">
         <div class="top">
-            <div class="logo"><a href="/">easy<span>java</span></a></div>
+            <div class="logo"><a th:href="@{${langPrefix} + '/'}">easy<span>java</span></a></div>
             <div class="controls">
                 <button class="bvi-toggle bvi-open" title="Версия для слабовидящих">👁️</button>
                 <button class="theme-toggle" id="theme-toggle">🌓</button>
             </div>
         </div>
 
-        <h1 class="title">Гайд для тех, кто боится Java</h1>
-        <p class="subtitle">8 уроков. Никакой бюрократии. Только код и кайф.</p>
+        <h1 class="title" th:text="#{guide.title}">Гайд для тех, кто боится Java</h1>
+        <p class="subtitle" th:text="#{guide.subtitle}">8 уроков. Никакой бюрократии. Только код и кайф.</p>
 
-        <a th:each="l : ${lessons}" th:href="@{/guide/{slug}(slug=${l.slug()})}" class="lesson-card">
+        <a th:each="l : ${lessons}"
+           th:href="@{${langPrefix} + '/guide/' + ${l.slug()}}"
+           class="lesson-card">
             <span class="lesson-emoji" th:text="${l.emoji()}">☕</span>
             <div class="lesson-info">
                 <h3 th:text="${l.getTitle(locale)}">Название урока</h3>
@@ -78,19 +81,33 @@
         </a>
 
         <footer>
-			<a href="/" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
-			<a href="/en" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
-			<a href="/uk" th:classappend="${currentLang == 'uk' ? 'active' : ''}"><img src="/assets/lang/uk.png" alt="Українська"></a>
-			<a href="/zh-CN" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
-			<a href="/zh-TW" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
-		</footer>
+            <a href="/" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
+            <a href="/en" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
+            <a href="/uk" th:classappend="${currentLang == 'uk' ? 'active' : ''}"><img src="/assets/lang/ua.png" alt="Українська"></a>
+            <a href="/zh-CN" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
+            <a href="/zh-TW" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
+        </footer>
     </div>
 
     <script src="/assets/js/lenis.min.js"></script>
-	<script src="/assets/js/lenis-init.min.js"></script>
-	<script src="/assets/js/bvi.min.js"></script>
+    <script src="/assets/js/lenis-init.min.js"></script>
+    <script src="/assets/js/bvi.min.js"></script>
     <script>
-        new isvek.Bvi({ target: '.bvi-open', fontSize: 20, theme: 'white', images: true, speech: true, speechPanel: true, panelFixed: true });
+        new isvek.Bvi({
+            target: '.bvi-open',
+            fontSize: 20,
+            theme: 'white',
+            images: 'grayscale',
+            letterSpacing: 'normal',
+            lineHeight: 'normal',
+            speech: true,
+            fontFamily: 'arial',
+            builtElements: false,
+            panelFixed: true,
+            panelHide: false,
+            reload: false,
+            lang: 'ru-RU'
+        });
         const t = document.getElementById('theme-toggle');
         const h = document.documentElement;
         let cur = localStorage.getItem('theme') || 'system';

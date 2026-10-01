@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:with="langPrefix=${currentLang == 'ru' ? '' : '/' + currentLang}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Java — это кайф. Гайд для тех, кто боится заходить в Java. Без бюрократии.">
+    <meta name="description" content="Easy Java — сайт для тех, кто хочет выучить Java без страха и боли.">
     <meta name="keywords" content="Java, программирование, обучение, Spring Boot, easy java">
     <meta property="og:title" content="Easy Java — Java с кайфом">
     <meta property="og:description" content="Хватит бояться Java. Заходи, тут всё просто.">
@@ -12,7 +13,6 @@
     <meta name="twitter:card" content="summary_large_image">
     <title>Easy Java — Java с кайфом</title>
 
-    <!-- BVI CSS -->
     <link href="/assets/css/bvi.min.css" rel="stylesheet">
 
     <style>
@@ -42,7 +42,6 @@
 
         * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color .3s ease, color .3s ease; }
 
-        /* ============ КАСТОМНЫЙ СКРОЛЛБАР ============ */
         html { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
         ::-webkit-scrollbar { width: 10px; height: 10px; }
         ::-webkit-scrollbar-track { background: transparent; }
@@ -192,9 +191,9 @@
         </header>
 
         <section class="hero">
-            <h1 th:utext="#{hero.title}">Java — это кайф.</h1>
+            <h1 th:utext="#{hero.title}">Java — это <em>кайф</em>.<br>Серьёзно.</h1>
             <p th:text="#{hero.subtitle}">Хватит бояться «сложного энтерпрайзного языка».</p>
-            <a href="/guide" class="cta" th:text="#{guide.open}">Открыть гайд →</a>
+            <a th:href="@{${langPrefix} + '/guide'}" class="cta" th:text="#{guide.open}">Открыть гайд →</a>
         </section>
 
         <div class="cards">
@@ -216,31 +215,34 @@
         </div>
 
         <footer>
-			<a href="/" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
-			<a href="/en" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
-			<a href="/uk" th:classappend="${currentLang == 'uk' ? 'active' : ''}"><img src="/assets/lang/uk.png" alt="Українська"></a>
-			<a href="/zh-CN" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
-			<a href="/zh-TW" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
-		</footer>
+            <a href="/" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
+            <a href="/en" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
+            <a href="/uk" th:classappend="${currentLang == 'uk' ? 'active' : ''}"><img src="/assets/lang/ua.png" alt="Українська"></a>
+            <a href="/zh-CN" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
+            <a href="/zh-TW" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
+        </footer>
     </div>
 
-    <!-- Lenis + BVI (порядок важен) -->
     <script src="/assets/js/lenis.min.js"></script>
-	<script src="/assets/js/lenis-init.min.js"></script>
-	<script src="/assets/js/bvi.min.js"></script>
+    <script src="/assets/js/lenis-init.min.js"></script>
+    <script src="/assets/js/bvi.min.js"></script>
     <script>
-        // Инициализация BVI
         new isvek.Bvi({
             target: '.bvi-open',
             fontSize: 20,
             theme: 'white',
-            images: true,
+            images: 'grayscale',
+            letterSpacing: 'normal',
+            lineHeight: 'normal',
             speech: true,
-            speechPanel: true,
-            panelFixed: true
+            fontFamily: 'arial',
+            builtElements: false,
+            panelFixed: true,
+            panelHide: false,
+            reload: false,
+            lang: 'ru-RU'
         });
 
-        // Тема (как раньше)
         const themeToggle = document.getElementById('theme-toggle');
         const htmlElement = document.documentElement;
         let currentTheme = localStorage.getItem('theme') || 'system';
