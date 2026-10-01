@@ -29,7 +29,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    // --- Главная ---
+    // ---- Главная (лендинг) для каждого языка ----
 
     @GetMapping("/")
     public String homeRu(HttpServletRequest req, HttpServletResponse res, Model model) {
@@ -59,14 +59,7 @@ public class Application {
         return "index";
     }
 
-    @GetMapping("/uk")
-    public String homeUk(HttpServletRequest req, HttpServletResponse res, Model model) {
-        localeResolver.setLocale(req, res, Locale.forLanguageTag("uk"));
-        model.addAttribute("currentLang", "uk");
-        return "index";
-    }
-
-    // --- Гайд (список) ---
+    // ---- Гайд (список уроков) ----
 
     @GetMapping("/guide")
     public String guideRu(HttpServletRequest req, HttpServletResponse res, Model model) {
@@ -86,16 +79,7 @@ public class Application {
         return "guide";
     }
 
-    @GetMapping("/uk/guide")
-    public String guideUk(HttpServletRequest req, HttpServletResponse res, Model model) {
-        localeResolver.setLocale(req, res, Locale.forLanguageTag("uk"));
-        model.addAttribute("currentLang", "uk");
-        model.addAttribute("lessons", lessonService.getAll());
-        model.addAttribute("locale", Locale.forLanguageTag("uk"));
-        return "guide";
-    }
-
-    // --- Один урок ---
+    // ---- Один урок ----
 
     @GetMapping("/guide/{slug}")
     public String lessonRu(@PathVariable String slug, HttpServletRequest req, HttpServletResponse res, Model model) {
@@ -119,13 +103,11 @@ public class Application {
         return "lesson";
     }
 
-    @GetMapping("/uk/guide/{slug}")
-    public String lessonUk(@PathVariable String slug, HttpServletRequest req, HttpServletResponse res, Model model) {
-        localeResolver.setLocale(req, res, Locale.forLanguageTag("uk"));
-        var lesson = lessonService.findBySlug(slug).orElse(null);
-        if (lesson == null) return "redirect:/uk/guide";
-        model.addAttribute("currentLang", "uk");
-        model.addAttribute("lesson", lesson);
-        model.addAttribute("locale", Locale.forLanguageTag("uk"));
-        return "lesson";
+    // ---- Проверка сервера ----
+
+    @GetMapping("/api/status")
+    @ResponseBody
+    public String status() {
+        return "Java-сервер работает отлично! 🚀";
     }
+}
