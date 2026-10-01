@@ -109,12 +109,14 @@
             reload: false,
             lang: 'ru-RU'
         });
-        const t = document.getElementById('theme-toggle');
-        const h = document.documentElement;
-        let cur = localStorage.getItem('theme') || 'system';
-        function apply(x){ if(x==='dark') h.setAttribute('data-theme','dark'); else if(x==='light') h.setAttribute('data-theme','light'); else h.removeAttribute('data-theme'); }
-        apply(cur);
-        t.addEventListener('click',()=>{ cur = cur==='system'?'light':cur==='light'?'dark':'system'; localStorage.setItem('theme',cur); apply(cur); });
+        (function() {
+            const t = document.getElementById('theme-toggle');
+            const h = document.documentElement;
+            let cur = localStorage.getItem('theme') || 'system';
+            function apply(x){ if(x==='dark') h.setAttribute('data-theme','dark'); else if(x==='light') h.setAttribute('data-theme','light'); else h.removeAttribute('data-theme'); }
+            apply(cur);
+            t.addEventListener('click',()=>{ cur = cur==='system'?'light':cur==='light'?'dark':'system'; localStorage.setItem('theme',cur); apply(cur); });
+        })();
     </script>
 </body>
 </html>
