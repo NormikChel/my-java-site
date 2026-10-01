@@ -192,26 +192,26 @@
         </header>
 
         <section class="hero">
-            <h1>Java — это <em>кайф</em>.<br>Серьёзно.</h1>
-            <p>Хватит бояться «сложного энтерпрайзного языка». Тут ты пройдёшь путь от «Что такое переменная?» до «Я написал свой сайт на Spring Boot» — и всё это с удовольствием.</p>
-            <a href="/guide" class="cta">Открыть гайд →</a>
+            <h1 th:utext="#{hero.title}">Java — это кайф.</h1>
+            <p th:text="#{hero.subtitle}">Хватит бояться «сложного энтерпрайзного языка».</p>
+            <a href="/guide" class="cta" th:text="#{guide.open}">Открыть гайд →</a>
         </section>
 
         <div class="cards">
             <div class="card">
                 <span class="emoji">🧠</span>
-                <h3>Без бюрократии</h3>
-                <p>Никаких «сначала прочитай 600 страниц спецификации». Только живой код и кайф.</p>
+                <h3 th:text="#{hero.card1.title}">Без бюрократии</h3>
+                <p th:text="#{hero.card1.text}">Никаких «сначала прочитай 600 страниц спецификации».</p>
             </div>
             <div class="card">
                 <span class="emoji">⚡</span>
-                <h3>Быстрый старт</h3>
-                <p>Первая программа — за 10 секунд. Первый сайт — за вечер.</p>
+                <h3 th:text="#{hero.card2.title}">Быстрый старт</h3>
+                <p th:text="#{hero.card2.text}">Первая программа — за 10 секунд.</p>
             </div>
             <div class="card">
                 <span class="emoji">💼</span>
-                <h3>Реальная работа</h3>
-                <p>Вакансий на Java больше, чем на любом другом языке. И это не изменится.</p>
+                <h3 th:text="#{hero.card3.title}">Реальная работа</h3>
+                <p th:text="#{hero.card3.text}">Вакансий на Java больше, чем на любом другом языке.</p>
             </div>
         </div>
 
