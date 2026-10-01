@@ -3,197 +3,252 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta name="description" content="Easy Java — сайт для тех, кто хочет выучить Java без страха и боли.">
+    <meta name="description" content="Java — это кайф. Гайд для тех, кто боится заходить в Java. Без бюрократии.">
     <meta name="keywords" content="Java, программирование, обучение, Spring Boot, easy java">
-    <meta property="og:title" content="Easy Java">
+    <meta property="og:title" content="Easy Java — Java с кайфом">
     <meta property="og:description" content="Хватит бояться Java. Заходи, тут всё просто.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://easyjava.relaxdev.ru/">
     <meta name="twitter:card" content="summary_large_image">
-    <title>Easy Java</title>
-    
+    <title>Easy Java — Java с кайфом</title>
+
+    <!-- BVI CSS -->
+    <link href="/css/bvi.min.css" rel="stylesheet">
+
     <style>
         :root {
-            --bg-color: #f0f2f5;
-            --text-color: #1a1a1a;
-            --glass-bg: rgba(255, 255, 255, 0.4);
-            --glass-border: rgba(255, 255, 255, 0.6);
+            --bg: #f4f6fb;
+            --text: #0f172a;
+            --muted: #64748b;
+            --glass-bg: rgba(255, 255, 255, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.8);
             --accent: #f89820;
+            --scroll-thumb: rgba(248, 152, 32, 0.5);
+            --scroll-thumb-hover: rgba(248, 152, 32, 0.85);
         }
-
         @media (prefers-color-scheme: dark) {
             :root {
-                --bg-color: #0f172a;
-                --text-color: #e2e8f0;
-                --glass-bg: rgba(30, 41, 59, 0.4);
-                --glass-border: rgba(255, 255, 255, 0.1);
-                --accent: #f89820;
+                --bg: #0b1120;
+                --text: #e2e8f0;
+                --muted: #94a3b8;
+                --glass-bg: rgba(30, 41, 59, 0.45);
+                --glass-border: rgba(255, 255, 255, 0.08);
+                --scroll-thumb: rgba(248, 152, 32, 0.45);
+                --scroll-thumb-hover: rgba(248, 152, 32, 0.85);
             }
         }
+        [data-theme="light"] { --bg:#f4f6fb; --text:#0f172a; --muted:#64748b; --glass-bg: rgba(255,255,255,0.65); --glass-border: rgba(255,255,255,0.9); }
+        [data-theme="dark"]  { --bg:#0b1120; --text:#e2e8f0; --muted:#94a3b8; --glass-bg: rgba(30,41,59,0.6); --glass-border: rgba(255,255,255,0.1); }
 
-        [data-theme="light"] {
-            --bg-color: #f0f2f5;
-            --text-color: #1a1a1a;
-            --glass-bg: rgba(255, 255, 255, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.8);
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color .3s ease, color .3s ease; }
+
+        /* ============ КАСТОМНЫЙ СКРОЛЛБАР ============ */
+        html { scrollbar-width: thin; scrollbar-color: var(--scroll-thumb) transparent; }
+        ::-webkit-scrollbar { width: 10px; height: 10px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scroll-thumb);
+            border-radius: 8px;
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: background .3s;
         }
-
-        [data-theme="dark"] {
-            --bg-color: #0f172a;
-            --text-color: #e2e8f0;
-            --glass-bg: rgba(30, 41, 59, 0.6);
-            --glass-border: rgba(255, 255, 255, 0.1);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.3s ease, color 0.3s ease; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); background-clip: padding-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background-image: radial-gradient(circle at 10% 20%, rgba(248, 152, 32, 0.1) 0%, transparent 40%),
-                              radial-gradient(circle at 90% 80%, rgba(83, 130, 161, 0.1) 0%, transparent 40%);
+            padding: 24px;
+            background-image:
+                radial-gradient(circle at 15% 15%, rgba(248,152,32,.12), transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(83,130,161,.14), transparent 45%);
         }
 
-        .glass-container {
+        .wrap { width: 100%; max-width: 860px; }
+
+        header.top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .logo { font-weight: 800; letter-spacing: -0.5px; font-size: 1.15rem; }
+        .logo span { color: var(--accent); }
+
+        .controls { display: flex; gap: 10px; align-items: center; }
+        .theme-toggle, .bvi-toggle {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(12px);
+            border-radius: 50%;
+            width: 44px; height: 44px;
+            cursor: pointer; font-size: 1.15rem;
+            color: var(--text);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform .2s;
+        }
+        .theme-toggle:hover, .bvi-toggle:hover { transform: translateY(-2px); }
+
+        .hero {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            padding: 56px 40px;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(0,0,0,.08);
+            animation: fadeUp .8s ease-out;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+        .hero h1 em { color: var(--accent); font-style: normal; }
+        .hero p {
+            font-size: 1.15rem;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 620px;
+            margin: 0 auto 32px;
+        }
+
+        .cta {
+            display: inline-block;
+            background: var(--accent);
+            color: #fff;
+            padding: 16px 36px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            box-shadow: 0 8px 24px rgba(248,152,32,.4);
+            transition: transform .2s, box-shadow .2s;
+        }
+        .cta:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(248,152,32,.55); }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 28px;
+        }
+        .card {
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 40px;
-            max-width: 800px;
-            width: 100%;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
-            animation: fadeIn 0.8s ease-out;
-            text-align: center;
+            border-radius: 20px;
+            padding: 24px;
+            transition: transform .25s;
         }
+        .card:hover { transform: translateY(-4px); }
+        .card .emoji { font-size: 1.8rem; display: block; margin-bottom: 12px; }
+        .card h3 { font-size: 1rem; margin-bottom: 8px; letter-spacing: -0.2px; }
+        .card p { font-size: .9rem; color: var(--muted); line-height: 1.5; }
 
-        h1 { font-size: 3rem; margin-bottom: 20px; color: var(--accent); }
-        p { font-size: 1.2rem; line-height: 1.6; margin-bottom: 30px; }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--accent);
-            color: #fff;
-            padding: 12px 30px;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: transform 0.2s, background-color 0.2s;
-            box-shadow: 0 4px 15px rgba(248, 152, 32, 0.4);
-        }
-
-        .btn:hover { transform: translateY(-2px); background-color: #ffb347; }
-
-        /* Футер с флагами */
         footer {
             margin-top: 40px;
             display: flex;
             gap: 15px;
             justify-content: center;
-            align-items: center;
         }
-
         footer img {
-            width: 32px;
-            height: 32px;
+            width: 30px; height: 30px;
             border-radius: 50%;
             cursor: pointer;
-            opacity: 0.4; /* Все флаги изначально затемнены */
-            transition: opacity 0.3s ease;
+            opacity: .35;
             object-fit: cover;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            transition: opacity .3s ease, transform .3s ease;
         }
+        footer img:hover { opacity: 1; transform: translateY(-2px); }
+        footer a.active img { opacity: 1; }
 
-        footer img:hover {
-            opacity: 1; /* При наведении флаг становится ярким */
-        }
-
-        footer a.active img {
-            opacity: 1; /* Активный язык всегда яркий */
-        }
-
-        /* Кнопка смены темы */
-        .theme-toggle {
-            position: fixed; top: 20px; right: 20px;
-            background: var(--glass-bg); border: 1px solid var(--glass-border);
-            backdrop-filter: blur(10px); border-radius: 50%;
-            width: 50px; height: 50px; cursor: pointer; font-size: 1.5rem;
-            display: flex; align-items: center; justify-content: center;
-            color: var(--text-color); box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Адаптивность */
-        @media (max-width: 768px) {
-            .glass-container { padding: 30px; }
-            h1 { font-size: 2.2rem; }
-            p { font-size: 1rem; }
-        }
+        @keyframes fadeUp { from { opacity:0; transform: translateY(24px);} to {opacity:1; transform:translateY(0);} }
 
         @media (max-width: 480px) {
-            .glass-container { padding: 20px; }
-            h1 { font-size: 1.8rem; }
-            .btn { width: 100%; text-align: center; }
-        }
-
-        @media (max-width: 280px) {
-            .glass-container { padding: 10px; border-radius: 12px; }
-            h1 { font-size: 1.2rem; }
-            p { font-size: 0.8rem; margin-bottom: 15px; }
-            .btn { font-size: 0.8rem; padding: 8px 10px; }
-            footer img { width: 24px; height: 24px; }
-            .theme-toggle { width: 35px; height: 35px; font-size: 1rem; top: 10px; right: 10px; }
+            .hero { padding: 36px 20px; border-radius: 22px; }
+            .cta { width: 100%; }
+            .theme-toggle, .bvi-toggle { width: 40px; height: 40px; font-size: 1rem; }
         }
     </style>
 </head>
 <body>
-    <button class="theme-toggle" id="theme-toggle" title="Сменить тему">🌓</button>
+    <div class="wrap bvi-speech">
+        <header class="top">
+            <div class="logo">easy<span>java</span></div>
+            <div class="controls">
+                <button class="bvi-toggle bvi-open" id="bvi-toggle" title="Версия для слабовидящих">👁️</button>
+                <button class="theme-toggle" id="theme-toggle" title="Сменить тему">🌓</button>
+            </div>
+        </header>
 
-    <div class="glass-container">
-        <h1 th:text="#{welcome.title}">Java — это просто!</h1>
-        <p th:text="#{welcome.subtitle}">Хватит бояться. Здесь ты научишься писать код.</p>
-        <a href="/api/status" class="btn" th:text="#{btn.check}">Проверить сервер</a>
+        <section class="hero">
+            <h1>Java — это <em>кайф</em>.<br>Серьёзно.</h1>
+            <p>Хватит бояться «сложного энтерпрайзного языка». Тут ты пройдёшь путь от «Что такое переменная?» до «Я написал свой сайт на Spring Boot» — и всё это с удовольствием.</p>
+            <a href="/guide" class="cta">Открыть гайд →</a>
+        </section>
+
+        <div class="cards">
+            <div class="card">
+                <span class="emoji">🧠</span>
+                <h3>Без бюрократии</h3>
+                <p>Никаких «сначала прочитай 600 страниц спецификации». Только живой код и кайф.</p>
+            </div>
+            <div class="card">
+                <span class="emoji">⚡</span>
+                <h3>Быстрый старт</h3>
+                <p>Первая программа — за 10 секунд. Первый сайт — за вечер.</p>
+            </div>
+            <div class="card">
+                <span class="emoji">💼</span>
+                <h3>Реальная работа</h3>
+                <p>Вакансий на Java больше, чем на любом другом языке. И это не изменится.</p>
+            </div>
+        </div>
+
+        <footer>
+            <a href="/" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
+            <a href="/en" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
+            <a href="/zh-CN" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
+            <a href="/zh-TW" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
+        </footer>
     </div>
 
-    <footer>
-        <!-- Ссылки теперь ведут на ЧПУ, а класс active добавляется через Thymeleaf -->
-        <a href="/" th:classappend="${currentLang == 'ru' ? 'active' : ''}">
-            <img src="/assets/lang/ru.png" alt="Русский">
-        </a>
-        <a href="/en" th:classappend="${currentLang == 'en' ? 'active' : ''}">
-            <img src="/assets/lang/us.png" alt="English">
-        </a>
-        <a href="/zh-CN" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}">
-            <img src="/assets/lang/cn.png" alt="简体中文">
-        </a>
-        <a href="/zh-TW" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}">
-            <img src="/assets/lang/tw.png" alt="繁體中文">
-        </a>
-    </footer>
-
+    <!-- Lenis + BVI (порядок важен) -->
+    <script src="/js/lenis.min.js"></script>
+    <script src="/js/lenis-init.min.js"></script>
+    <script src="/js/bvi.min.js"></script>
     <script>
+        // Инициализация BVI
+        new isvek.Bvi({
+            target: '.bvi-open',
+            fontSize: 140,
+            theme: 'white',
+            images: true,
+            speech: true,
+            speechPanel: true,
+            panelFixed: true
+        });
+
+        // Тема (как раньше)
         const themeToggle = document.getElementById('theme-toggle');
         const htmlElement = document.documentElement;
         let currentTheme = localStorage.getItem('theme') || 'system';
-        
-        function applyTheme(theme) {
-            if (theme === 'dark') htmlElement.setAttribute('data-theme', 'dark');
-            else if (theme === 'light') htmlElement.setAttribute('data-theme', 'light');
+        function applyTheme(t) {
+            if (t === 'dark') htmlElement.setAttribute('data-theme','dark');
+            else if (t === 'light') htmlElement.setAttribute('data-theme','light');
             else htmlElement.removeAttribute('data-theme');
         }
-
         applyTheme(currentTheme);
-
         themeToggle.addEventListener('click', () => {
             if (currentTheme === 'system') currentTheme = 'light';
             else if (currentTheme === 'light') currentTheme = 'dark';
