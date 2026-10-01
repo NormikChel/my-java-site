@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru" xmlns:th="http://www.thymeleaf.org"
-      th:with="langPrefix=${currentLang == 'ru' ? '' : '/' + currentLang}, pathSuffix=${pathSuffix ?: ''}">
+      th:with="langPrefix=${currentLang == 'ru' ? '' : '/' + currentLang},
+               flagSuffix=${(pathSuffix == null || pathSuffix == '/' || pathSuffix == '') ? '' : pathSuffix}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
@@ -215,11 +216,11 @@
         </div>
 
         <footer>
-            <a th:href="@{${#strings.isEmpty(pathSuffix) || pathSuffix == '/' ? '/' : pathSuffix}}" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
-            <a th:href="@{'/en' + (${#strings.isEmpty(pathSuffix) || pathSuffix == '/' ? '' : pathSuffix})}" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
-            <a th:href="@{'/uk' + (${#strings.isEmpty(pathSuffix) || pathSuffix == '/' ? '' : pathSuffix})}" th:classappend="${currentLang == 'uk' ? 'active' : ''}"><img src="/assets/lang/ua.png" alt="Українська"></a>
-            <a th:href="@{'/zh-CN' + (${#strings.isEmpty(pathSuffix) || pathSuffix == '/' ? '' : pathSuffix})}" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
-            <a th:href="@{'/zh-TW' + (${#strings.isEmpty(pathSuffix) || pathSuffix == '/' ? '' : pathSuffix})}" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
+            <a th:href="@{${flagSuffix == '' ? '/' : flagSuffix}}" th:classappend="${currentLang == 'ru' ? 'active' : ''}"><img src="/assets/lang/ru.png" alt="Русский"></a>
+            <a th:href="@{'/en' + ${flagSuffix}}" th:classappend="${currentLang == 'en' ? 'active' : ''}"><img src="/assets/lang/us.png" alt="English"></a>
+            <a th:href="@{'/uk' + ${flagSuffix}}" th:classappend="${currentLang == 'uk' ? 'active' : ''}"><img src="/assets/lang/ua.png" alt="Українська"></a>
+            <a th:href="@{'/zh-CN' + ${flagSuffix}}" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}"><img src="/assets/lang/cn.png" alt="简体中文"></a>
+            <a th:href="@{'/zh-TW' + ${flagSuffix}}" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
         </footer>
     </div>
 
