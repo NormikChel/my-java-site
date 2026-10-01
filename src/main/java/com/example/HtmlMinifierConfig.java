@@ -42,21 +42,27 @@ public class HtmlMinifierConfig {
             compressor.setSimpleDoctype(true);
             compressor.setPreserveLineBreaks(false);
             compressor.setRemoveSurroundingSpaces("br,p");
-            compressor.setCompressCss(true);
-            compressor.setCompressJavaScript(true);
+            compressor.setCompressCss(false);
+            compressor.setCompressJavaScript(false);
         }
 
         @Override
         public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
                 throws IOException, ServletException {
+            if (!(resp instanceof HttpServletResponse)) {
+                chain.doFilter(req, resp);
+                return;
+            }
+
             HttpServletResponse response = (HttpServletResponse) resp;
             CharResponseWrapper wrapper = new CharResponseWrapper(response);
-
             chain.doFilter(req, wrapper);
 
             String contentType = response.getContentType();
             if (contentType == null || !contentType.contains("text/html")) {
-                response.getWriter().write(wrapper.toString());
+                byte[] bytes = wrapper.getBytes();
+                response.setContentLength(bytes.length);
+                response.getOutputStream().write(bytes);
                 return;
             }
 
@@ -64,15 +70,16 @@ public class HtmlMinifierConfig {
             String minified;
             try {
                 minified = compressor.compress(original);
-            } catch (Exception e) {
+            } catch (Throwable t) {
                 minified = original;
             }
-            response.setContentLength(minified.getBytes(StandardCharsets.UTF_8).length);
-            response.getWriter().write(minified);
+            byte[] bytes = minified.getBytes(StandardCharsets.UTF_8);
+            response.setContentLength(bytes.length);
+            response.getOutputStream().write(bytes);
         }
 
         static class CharResponseWrapper extends HttpServletResponseWrapper {
-            private final CharArrayWriter writer = new CharArrayWriter();
+            private final CharArrayWriter charWriter = new CharArrayWriter();
 
             CharResponseWrapper(HttpServletResponse response) {
                 super(response);
@@ -80,12 +87,16 @@ public class HtmlMinifierConfig {
 
             @Override
             public PrintWriter getWriter() {
-                return new PrintWriter(writer);
+                return new PrintWriter(charWriter);
             }
 
             @Override
             public String toString() {
-                return writer.toString();
+                return charWriter.toString();
+            }
+
+            public byte[] getBytes() {
+                return charWriter.toString().getBytes(StandardCharsets.UTF_8);
             }
         }
     }
