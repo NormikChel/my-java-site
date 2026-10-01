@@ -16,10 +16,9 @@ public class Application {
 
     @GetMapping("/")
     public String index() {
-        return "index"; // Ищем файл index.html в папке templates
+        return "index"; // Ищем index.html в папке templates
     }
 
-    // Небольшой API для проверки, что сервер жив
     @GetMapping("/api/status")
     @ResponseBody
     public String status() {
