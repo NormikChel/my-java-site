@@ -93,6 +93,7 @@
 
         .btn:hover { transform: translateY(-2px); background-color: #ffb347; }
 
+        /* Футер с флагами */
         footer {
             margin-top: 40px;
             display: flex;
@@ -106,13 +107,21 @@
             height: 32px;
             border-radius: 50%;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            opacity: 0.4; /* Все флаги изначально затемнены */
+            transition: opacity 0.3s ease;
             object-fit: cover;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
-        footer img:hover { transform: scale(1.2); box-shadow: 0 4px 12px rgba(0,0,0,0.4); }
+        footer img:hover {
+            opacity: 1; /* При наведении флаг становится ярким */
+        }
 
+        footer a.active img {
+            opacity: 1; /* Активный язык всегда яркий */
+        }
+
+        /* Кнопка смены темы */
         .theme-toggle {
             position: fixed; top: 20px; right: 20px;
             background: var(--glass-bg); border: 1px solid var(--glass-border);
@@ -124,6 +133,7 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* Адаптивность */
         @media (max-width: 768px) {
             .glass-container { padding: 30px; }
             h1 { font-size: 2.2rem; }
@@ -155,11 +165,20 @@
         <a href="/api/status" class="btn" th:text="#{btn.check}">Проверить сервер</a>
     </div>
 
-     <footer>
-        <a href="?lang=ru"><img src="/assets/lang/ru.png" alt="Русский"></a>
-        <a href="?lang=en"><img src="/assets/lang/us.png" alt="English"></a>
-        <a href="?lang=zh_CN"><img src="/assets/lang/cn.png" alt="简体中文"></a>
-        <a href="?lang=zh_TW"><img src="/assets/lang/tw.png" alt="繁體中文"></a>
+    <footer>
+        <!-- Ссылки теперь ведут на ЧПУ, а класс active добавляется через Thymeleaf -->
+        <a href="/" th:classappend="${currentLang == 'ru' ? 'active' : ''}">
+            <img src="/assets/lang/ru.png" alt="Русский">
+        </a>
+        <a href="/en" th:classappend="${currentLang == 'en' ? 'active' : ''}">
+            <img src="/assets/lang/us.png" alt="English">
+        </a>
+        <a href="/zh-CN" th:classappend="${currentLang == 'zh-CN' ? 'active' : ''}">
+            <img src="/assets/lang/cn.png" alt="简体中文">
+        </a>
+        <a href="/zh-TW" th:classappend="${currentLang == 'zh-TW' ? 'active' : ''}">
+            <img src="/assets/lang/tw.png" alt="繁體中文">
+        </a>
     </footer>
 
     <script>
