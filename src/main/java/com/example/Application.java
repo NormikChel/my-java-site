@@ -7,10 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.LocaleResolver;
 
+import java.util.List;
 import java.util.Locale;
 
 @SpringBootApplication
@@ -27,6 +29,27 @@ public class Application {
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+    }
+
+    // ============== ОПРЕДЕЛЯЕМ pathSuffix ДЛЯ ВСЕХ ШАБЛОНОВ ==============
+    // Пример: /en/guide/mindset → /guide/mindset
+    //         /zh-CN/guide      → /guide
+    //         /guide            → /guide
+    //         /                 → /
+    @ModelAttribute("pathSuffix")
+    public String pathSuffix(HttpServletRequest req) {
+        String path = req.getRequestURI();
+        String ctx = req.getContextPath();
+        if (ctx != null && !ctx.isEmpty() && path.startsWith(ctx)) {
+            path = path.substring(ctx.length());
+        }
+        List<String> langs = List.of("/en", "/uk", "/zh-CN", "/zh-TW");
+        for (String lang : langs) {
+            if (path.equals(lang) || path.startsWith(lang + "/")) {
+                return path.substring(lang.length());
+            }
+        }
+        return path;
     }
 
     // ================== ГЛАВНАЯ ==================
